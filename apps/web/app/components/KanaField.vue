@@ -73,7 +73,7 @@ function onKeyDown(event: KeyboardEvent) {
 </script>
 
 <template>
-  <div>
+  <div class="flex items-center gap-2">
     <input
       ref="input"
       :value="model"
@@ -82,7 +82,7 @@ function onKeyDown(event: KeyboardEvent) {
       autocomplete="off"
       autocapitalize="none"
       :spellcheck="false"
-      class="w-full rounded-md border px-2 py-1.5 text-sm"
+      class="w-1/2 shrink-0 rounded-md border px-2 py-1.5 text-sm"
       :class="{
         'border-green-600 bg-green-50': status === 'correct',
         'border-red-600 outline outline-2 outline-offset-1 outline-red-600': status === 'incorrect',
@@ -94,7 +94,11 @@ function onKeyDown(event: KeyboardEvent) {
       @input="onInput"
       @keydown="onKeyDown"
     >
-    <p v-if="reveal && status === 'incorrect' && hint" class="mt-1 text-xs text-red-700" lang="ja">{{ hint }}</p>
+    <p
+      v-if="reveal && status === 'incorrect' && hint"
+      class="min-w-0 whitespace-nowrap text-sm text-red-700"
+      lang="ja"
+    >{{ hint }}</p>
   </div>
 </template>
 

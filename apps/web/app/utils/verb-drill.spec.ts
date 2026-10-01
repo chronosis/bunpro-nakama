@@ -36,6 +36,19 @@ describe('verbForms', () => {
     expect(forms.progressiveNegative.polite).toEqual(['たべていません', 'たべてません']);
     expect(forms.desire.polite).toEqual(['たべたいです']);
     expect(forms.desireNegative.polite).toEqual(['たべたくないです', 'たべたくありません']);
+    expect(forms.permissive.casual).toEqual(['たべてもいい']);
+    expect(forms.permissive.polite).toEqual(['たべてもいいです']);
+    expect(forms.permissiveNegative.casual).toEqual(['たべなくてもいい']);
+    expect(forms.permissiveNegative.polite).toEqual(['たべなくてもいいです']);
+    expect(forms.compulsive.casual[0]).toBe('たべなくてはいけない');
+    expect(forms.compulsive.casual).toContain('たべなきゃいけない');
+    expect(forms.compulsive.polite[0]).toBe('たべなくてはいけません');
+    expect(forms.compulsiveNegative.casual).toEqual(['たべてはいけない', 'たべちゃいけない']);
+    expect(forms.compulsiveNegative.polite).toEqual(['たべてはいけません', 'たべちゃいけません']);
+    expect(forms.advice.casual).toEqual(['たべたほうがいい']);
+    expect(forms.advice.polite).toEqual(['たべたほうがいいです']);
+    expect(forms.adviceNegative.casual).toEqual(['たべないほうがいい']);
+    expect(forms.adviceNegative.polite).toEqual(['たべないほうがいいです']);
   });
 
   it('conjugates 書く godan te, ta, negative, and volitional', () => {
@@ -53,6 +66,9 @@ describe('verbForms', () => {
     expect(forms.te.casual).not.toContain('いいて');
     expect(forms.past.casual).not.toContain('いいた');
     expect(forms.dictionary.polite).toEqual(['いきます']);
+    expect(forms.permissive.casual).toEqual(['いってもいい']);
+    expect(forms.advice.casual).toEqual(['いったほうがいい']);
+    expect(forms.compulsiveNegative.casual[0]).toBe('いってはいけない');
   });
 
   it('accepts 泳ぐ te, ta, and the progressive contraction', () => {
@@ -63,6 +79,10 @@ describe('verbForms', () => {
     expect(forms.progressiveNegative.casual).toEqual(['およいでいない', 'およいでない']);
     expect(forms.progressiveNegative.polite).toEqual(['およいでいません', 'およいでません']);
     expect(forms.desireNegative.casual).toEqual(['およぎたくない']);
+    expect(forms.permissive.casual).toEqual(['およいでもいい']);
+    expect(forms.compulsiveNegative.casual).toEqual(['およいではいけない', 'およいじゃいけない']);
+    expect(forms.advice.casual).toEqual(['およいだほうがいい']);
+    expect(forms.adviceNegative.casual).toEqual(['およがないほうがいい']);
   });
 
   it('treats ある casual negative as ない and polite as ありません', () => {
@@ -71,6 +91,9 @@ describe('verbForms', () => {
     expect(forms.negative.casual).not.toContain('あらない');
     expect(forms.pastNegative.casual).toEqual(['なかった']);
     expect(forms.negative.polite).toEqual(['ありません']);
+    expect(forms.permissiveNegative.casual).toEqual(['なくてもいい']);
+    expect(forms.compulsive.casual[0]).toBe('なくてはいけない');
+    expect(forms.adviceNegative.casual).toEqual(['ないほうがいい']);
   });
 
   it('conjugates する and 来る as irregulars', () => {
@@ -84,6 +107,9 @@ describe('verbForms', () => {
     expect(suru.desire.casual).toEqual(['したい']);
     expect(suru.desireNegative.casual).toEqual(['したくない']);
     expect(suru.progressiveNegative.casual).toEqual(['していない', 'してない']);
+    expect(suru.permissive.casual).toEqual(['してもいい']);
+    expect(suru.permissiveNegative.casual).toEqual(['しなくてもいい']);
+    expect(suru.advice.casual).toEqual(['したほうがいい']);
 
     const kuru = verbForms(findVerb('来る'));
     expect(kuru.negative.casual).toEqual(['こない']);
@@ -95,6 +121,10 @@ describe('verbForms', () => {
     expect(kuru.desire.casual).toEqual(['きたい']);
     expect(kuru.desireNegative.polite).toEqual(['きたくないです', 'きたくありません']);
     expect(kuru.progressiveNegative.casual).toEqual(['きていない', 'きてない']);
+    expect(kuru.permissiveNegative.casual).toEqual(['こなくてもいい']);
+    expect(kuru.compulsive.casual[0]).toBe('こなくてはいけない');
+    expect(kuru.advice.casual).toEqual(['きたほうがいい']);
+    expect(kuru.adviceNegative.casual).toEqual(['こないほうがいい']);
   });
 });
 

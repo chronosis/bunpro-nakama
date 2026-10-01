@@ -9,6 +9,7 @@
     "build": "nx run-many -t build,build-firefox",
     "test": "nx run-many -t test",
     "lint": "nx run-many -t lint",
+    "lint:fix": "nx run-many -t lint --fix",
     "typecheck": "nx run-many -t typecheck"
   },
   "private": true,

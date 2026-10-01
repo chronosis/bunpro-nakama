@@ -102,8 +102,8 @@ const correctCount = computed(() => {
 </script>
 
 <template>
-  <form class="space-y-6" @submit.prevent="check">
-    <div class="flex flex-wrap items-center justify-between gap-3">
+  <form @submit.prevent="check">
+    <div class="m-0 flex flex-wrap items-center justify-between gap-3">
       <h1 class="text-3xl font-semibold">Verb study</h1>
       <div class="flex gap-2">
         <UButton type="submit" :disabled="!current">Check answers</UButton>
@@ -122,34 +122,34 @@ const correctCount = computed(() => {
       </div>
     </div>
 
-    <p class="text-sm text-muted">
+    <p class="m-0 text-xs text-muted">
       Type romaji. It turns into hiragana as you type. A Japanese IME is left alone until the composition finishes.
     </p>
 
-    <div v-if="current" class="space-y-6">
+    <div v-if="current">
       <div class="text-center">
-        <p class="text-4xl" lang="ja">
+        <p class="text-4xl leading-tight" lang="ja">
           <template v-for="(part, index) in parts" :key="`${part.text}-${index}`">
             <ruby v-if="part.reading">{{ part.text }}<rt>{{ part.reading }}</rt></ruby><span v-else>{{ part.text }}</span>
           </template>
         </p>
-        <p class="mt-1 text-muted">{{ current.meaning }}</p>
-        <p v-if="checked" class="mt-1 text-sm text-muted">Hint: {{ verbClassLabel(current) }}</p>
+        <p class="m-0 text-muted">{{ current.meaning }}</p>
+        <p v-if="checked" class="m-0 text-sm text-muted">Hint: {{ verbClassLabel(current) }}</p>
       </div>
 
       <div class="overflow-x-auto">
         <table class="w-full min-w-[36rem] border-collapse text-left">
           <thead>
             <tr class="text-sm text-muted">
-              <th class="w-40 pb-2 font-medium" />
-              <th class="pb-2 font-medium">Casual</th>
-              <th class="pb-2 font-medium">Polite</th>
+              <th class="w-40 font-medium" />
+              <th class="font-medium">Casual</th>
+              <th class="font-medium">Polite</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="row in FORM_ROWS" :key="row.id">
-              <th class="py-1.5 pr-3 align-top text-sm font-medium">{{ row.label }}</th>
-              <td class="px-1 py-1.5 align-top">
+              <th class="py-0 pr-3 align-middle text-sm font-medium">{{ row.label }}</th>
+              <td class="px-1 py-0 align-middle">
                 <KanaField
                   v-model="answers[row.id].casual"
                   :status="statusFor(row.id, 'casual')"
@@ -159,7 +159,7 @@ const correctCount = computed(() => {
                   :aria-label="`${row.label} casual`"
                 />
               </td>
-              <td class="px-1 py-1.5 align-top">
+              <td class="px-1 py-0 align-middle">
                 <KanaField
                   v-model="answers[row.id].polite"
                   :status="statusFor(row.id, 'polite')"
@@ -174,7 +174,7 @@ const correctCount = computed(() => {
         </table>
       </div>
 
-      <p v-if="checked" class="text-sm">{{ correctCount }} of {{ FORM_ROWS.length * 2 }} correct.</p>
+      <p v-if="checked" class="mt-2 text-sm">{{ correctCount }} of {{ FORM_ROWS.length * 2 }} correct.</p>
     </div>
   </form>
 </template>

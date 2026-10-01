@@ -260,7 +260,7 @@ function suruForms(_lexeme: Lexeme): BuiltForm[] {
   ].map(([formName, surface]) => ({ stem: 'し', form: formName ?? 'dictionary', kanji: surface ?? '', kana: surface ?? '' }));
 }
 
-function kuruForms(lexeme: Lexeme): BuiltForm[] {
+function kuruForms(_lexeme: Lexeme): BuiltForm[] {
   return [
     form('き', 'dictionary', '来', 'く', 'る'),
     form('き', 'masu', '来', 'き', 'ます'),

@@ -10,7 +10,13 @@ export type FormId =
   | 'progressive'
   | 'progressiveNegative'
   | 'desire'
-  | 'desireNegative';
+  | 'desireNegative'
+  | 'permissive'
+  | 'permissiveNegative'
+  | 'compulsive'
+  | 'compulsiveNegative'
+  | 'advice'
+  | 'adviceNegative';
 
 export type Politeness = 'casual' | 'polite';
 
@@ -39,6 +45,12 @@ export const FORM_ROWS: readonly { id: FormId; label: string }[] = [
   { id: 'progressiveNegative', label: 'Negative progressive' },
   { id: 'desire', label: 'Desire' },
   { id: 'desireNegative', label: 'Negative desire' },
+  { id: 'permissive', label: 'Permissive' },
+  { id: 'permissiveNegative', label: 'Permissive negative' },
+  { id: 'compulsive', label: 'Compulsive' },
+  { id: 'compulsiveNegative', label: 'Compulsive negative' },
+  { id: 'advice', label: 'Advice' },
+  { id: 'adviceNegative', label: 'Advice negative' },
 ];
 
 const GODAN_ROWS: Record<string, [string, string, string, string, string]> = {
@@ -104,20 +116,84 @@ function negativeDesire(iStem: string): AnswerCell {
   return pair(one(`${iStem}たくない`), [`${iStem}たくないです`, `${iStem}たくありません`]);
 }
 
+function naiStem(nai: string): string {
+  return nai.slice(0, -1);
+}
+
+function permissive(te: string): AnswerCell {
+  return pair(one(`${te}もいい`), one(`${te}もいいです`));
+}
+
+function permissiveNegative(nai: string): AnswerCell {
+  const stem = naiStem(nai);
+  return pair(one(`${stem}くてもいい`), one(`${stem}くてもいいです`));
+}
+
+function compulsive(nai: string): AnswerCell {
+  const stem = naiStem(nai);
+  return pair(
+    [
+      `${stem}くてはいけない`,
+      `${stem}ければいけない`,
+      `${stem}くちゃいけない`,
+      `${stem}きゃいけない`,
+    ],
+    [`${stem}くてはいけません`, `${stem}ければいけません`],
+  );
+}
+
+function compulsiveNegative(te: string): AnswerCell {
+  const casual = [`${te}はいけない`];
+  const polite = [`${te}はいけません`];
+  if (te.endsWith('て')) {
+    casual.push(`${te.slice(0, -1)}ちゃいけない`);
+    polite.push(`${te.slice(0, -1)}ちゃいけません`);
+  } else if (te.endsWith('で')) {
+    casual.push(`${te.slice(0, -1)}じゃいけない`);
+    polite.push(`${te.slice(0, -1)}じゃいけません`);
+  }
+  return pair(casual, polite);
+}
+
+function advice(ta: string): AnswerCell {
+  return pair(one(`${ta}ほうがいい`), one(`${ta}ほうがいいです`));
+}
+
+function adviceNegative(nai: string): AnswerCell {
+  return pair(one(`${nai}ほうがいい`), one(`${nai}ほうがいいです`));
+}
+
+function modality(te: string, ta: string, nai: string): Pick<
+  AnswerGrid,
+  'permissive' | 'permissiveNegative' | 'compulsive' | 'compulsiveNegative' | 'advice' | 'adviceNegative'
+> {
+  return {
+    permissive: permissive(te),
+    permissiveNegative: permissiveNegative(nai),
+    compulsive: compulsive(nai),
+    compulsiveNegative: compulsiveNegative(te),
+    advice: advice(ta),
+    adviceNegative: adviceNegative(nai),
+  };
+}
+
 function conjugateIchidan(reading: string): AnswerGrid {
   const stem = reading.slice(0, -1);
   const te = `${stem}て`;
+  const ta = `${stem}た`;
+  const nai = `${stem}ない`;
   return {
     dictionary: pair(one(reading), one(`${stem}ます`)),
-    negative: pair(one(`${stem}ない`), one(`${stem}ません`)),
+    negative: pair(one(nai), one(`${stem}ません`)),
     te: pair(one(te), one(`${stem}まして`)),
-    past: pair(one(`${stem}た`), one(`${stem}ました`)),
+    past: pair(one(ta), one(`${stem}ました`)),
     pastNegative: pair(one(`${stem}なかった`), one(`${stem}ませんでした`)),
     volitional: pair(one(`${stem}よう`), one(`${stem}ましょう`)),
     progressive: progressive(te),
     progressiveNegative: negativeProgressive(te),
     desire: pair(one(`${stem}たい`), one(`${stem}たいです`)),
     desireNegative: negativeDesire(stem),
+    ...modality(te, ta, nai),
   };
 }
 
@@ -144,6 +220,7 @@ function conjugateGodan(reading: string, wordClass: 'godan' | 'iku' | 'aru'): An
     progressiveNegative: negativeProgressive(te),
     desire: pair(one(`${iStem}たい`), one(`${iStem}たいです`)),
     desireNegative: negativeDesire(iStem),
+    ...modality(te, ta, negative),
   };
 }
 
@@ -159,6 +236,7 @@ function conjugateSuru(): AnswerGrid {
     progressiveNegative: negativeProgressive('して'),
     desire: pair(one('したい'), one('したいです')),
     desireNegative: negativeDesire('し'),
+    ...modality('して', 'した', 'しない'),
   };
 }
 
@@ -174,6 +252,7 @@ function conjugateKuru(): AnswerGrid {
     progressiveNegative: negativeProgressive('きて'),
     desire: pair(one('きたい'), one('きたいです')),
     desireNegative: negativeDesire('き'),
+    ...modality('きて', 'きた', 'こない'),
   };
 }
 
@@ -238,6 +317,12 @@ export function emptyAnswers(): Record<FormId, Record<Politeness, string>> {
     progressiveNegative: { casual: '', polite: '' },
     desire: { casual: '', polite: '' },
     desireNegative: { casual: '', polite: '' },
+    permissive: { casual: '', polite: '' },
+    permissiveNegative: { casual: '', polite: '' },
+    compulsive: { casual: '', polite: '' },
+    compulsiveNegative: { casual: '', polite: '' },
+    advice: { casual: '', polite: '' },
+    adviceNegative: { casual: '', polite: '' },
   };
 }
 

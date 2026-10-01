@@ -1,7 +1,23 @@
 <script setup lang="ts">
+type LessonPlanDetail = {
+  createdAt: string;
+  model: string;
+  plan: {
+    title: string;
+    summary: string;
+    patterns: Array<{
+      title: string;
+      evidence: string;
+      suggestion: string;
+      missedQuestions: string[];
+    }>;
+    focusItems: Array<{ label: string; why: string; practice: string }>;
+  };
+};
+
 const route = useRoute();
 const id = computed(() => String(route.params.id));
-const { data } = await useFetch(() => `/api/lesson-plans/${encodeURIComponent(id.value)}`);
+const { data } = await useFetch<LessonPlanDetail>(() => `/api/lesson-plans/${encodeURIComponent(id.value)}`);
 
 const deleteOpen = ref(false);
 const deletePending = ref(false);

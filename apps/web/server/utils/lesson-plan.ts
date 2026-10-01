@@ -28,9 +28,10 @@ function splitPlanHeading<T extends { title?: string; summary: string }>(plan: T
   let title = (plan.title ?? '').replace(/^Title:\s*/i, '').trim();
   let summary = plan.summary.trim();
   const leading = summary.match(/^Title:\s*(.+?)(?:\r?\n|$)([\s\S]*)$/);
-  if (leading) {
-    if (!title) title = leading[1].trim();
-    summary = leading[2].trim();
+  const heading = leading?.[1];
+  if (heading) {
+    if (!title) title = heading.trim();
+    summary = (leading?.[2] ?? '').trim();
   }
   return { ...plan, title: title || 'Lesson plan', summary };
 }
