@@ -1,0 +1,64 @@
+{
+  "format": "bunpro-nakama.history",
+  "version": 1,
+  "exportedAt": "2026-09-27T12:00:00.000Z",
+  "sessions": [
+    {
+      "id": "bunpro:review:sample",
+      "startedAt": "2026-09-27T11:40:00.000Z",
+      "endedAt": "2026-09-27T11:55:00.000Z",
+      "sessionDate": "2026-09-27",
+      "attempts": [
+        {
+          "id": "sample-attempt-1",
+          "recordedAt": "2026-09-27T11:41:00.000Z",
+          "url": "https://bunpro.jp/reviews",
+          "location": "review",
+          "inputMode": "manual",
+          "questionMode": "cloze",
+          "grammarPoint": "て-form",
+          "prompt": "食べ___から、出かけます。",
+          "userAnswer": "て",
+          "acceptedAnswers": ["て"],
+          "result": "correct",
+          "resultSource": "metadata"
+        },
+        {
+          "id": "sample-attempt-2",
+          "recordedAt": "2026-09-27T11:44:00.000Z",
+          "url": "https://bunpro.jp/reviews",
+          "location": "review",
+          "inputMode": "manual",
+          "questionMode": "cloze",
+          "grammarPoint": "なければならない",
+          "prompt": "明日までにレポートを出さ___。",
+          "userAnswer": "なきゃ",
+          "acceptedAnswers": ["なければならない", "なきゃいけない"],
+          "result": "incorrect",
+          "resultSource": "metadata",
+          "helpPrompt": "Negative non-past, polite",
+          "lessonId": "8",
+          "lessonLabel": "Lesson 8 (8/13)",
+          "partOfSpeech": "Expression",
+          "wordType": "Verb",
+          "word": "出す",
+          "traits": ["verb", "irregular"]
+        },
+        {
+          "id": "sample-attempt-3",
+          "recordedAt": "2026-09-27T11:48:00.000Z",
+          "url": "https://bunpro.jp/reviews",
+          "location": "review",
+          "inputMode": "manual",
+          "questionMode": "translate",
+          "grammarPoint": "なければならない",
+          "prompt": "I have to wake up early.",
+          "userAnswer": "早く起きなければならない",
+          "acceptedAnswers": ["早く起きなければならない"],
+          "result": "incorrect",
+          "resultSource": "metadata"
+        }
+      ]
+    }
+  ]
+}

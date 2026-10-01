@@ -1,0 +1,11 @@
+{
+  "name": "session-history",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/session-history/src",
+  "projectType": "library",
+  "tags": [
+    "type:lib"
+  ],
+  "// targets": "to see all targets run: nx show project session-history --web",
+  "targets": {}
+}

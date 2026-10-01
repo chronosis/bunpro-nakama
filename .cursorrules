@@ -1,0 +1,15 @@
+# Bunpro Nakama
+
+Nx workspace with two local apps:
+
+- `apps/extension` — WXT (TypeScript compiled to the extension JS) for Chrome and Firefox. It only records Bunpro review answers on `bunpro.jp` and exports JSON.
+- `apps/web` — Nuxt 4 server, Drizzle, SQLite. Imports that JSON and calls Gemini from the server.
+- `libs/session-history` — shared Zod export schema. Change it in both callers together.
+
+## Rules
+
+- `GEMINI_API_KEY` stays in `apps/web` runtime config. Never send it to the browser or the extension.
+- Validate the history file with `parseHistoryExport` before writing it to SQLite.
+- Re-importing the same session id must not duplicate rows.
+- Do not hand-edit `apps/web/drizzle/migrations`. Change `apps/web/drizzle/schema.ts` and run `pnpm --filter @bunpro-nakama/web db:generate`.
+- Extension code that talks to the Bunpro page belongs in `apps/extension/src` and must stay unit-tested without a live login.

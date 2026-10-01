@@ -1,0 +1,62 @@
+{
+  "name": "extension",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/extension",
+  "projectType": "application",
+  "tags": ["type:app"],
+  "targets": {
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec tsc -p tsconfig.json --noEmit",
+        "cwd": "apps/extension"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["^build"],
+      "cache": true,
+      "outputs": ["{projectRoot}/.output/chrome-mv3"],
+      "options": {
+        "command": "pnpm exec wxt build",
+        "cwd": "apps/extension"
+      }
+    },
+    "build-firefox-mv2": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["^build"],
+      "cache": true,
+      "outputs": ["{projectRoot}/.output/firefox-mv2"],
+      "options": {
+        "command": "pnpm exec wxt build -b firefox --mv2",
+        "cwd": "apps/extension"
+      }
+    },
+    "build-firefox": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["^build"],
+      "cache": true,
+      "outputs": ["{projectRoot}/.output/firefox-mv3"],
+      "options": {
+        "command": "pnpm exec wxt build -b firefox --mv3",
+        "cwd": "apps/extension"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["^build"],
+      "options": {
+        "command": "pnpm exec wxt",
+        "cwd": "apps/extension"
+      }
+    },
+    "serve-firefox": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["^build"],
+      "options": {
+        "command": "pnpm exec wxt -b firefox --mv3",
+        "cwd": "apps/extension"
+      }
+    }
+  }
+}

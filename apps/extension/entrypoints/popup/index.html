@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bunpro Nakama</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Bunpro Nakama</h1>
+      <p id="status">Loading history…</p>
+      <label class="check">
+        <input id="debug" type="checkbox" />
+        Debug logging in the Bunpro tab console
+      </label>
+      <label class="check">
+        <input id="diagnostics" type="checkbox" />
+        Save page diagnostics with each answer
+      </label>
+      <div class="actions">
+        <button id="export" type="button">Export history</button>
+        <button id="export-diagnostics" type="button">Export diagnostics</button>
+        <button id="end" type="button">End session</button>
+        <button id="clear" type="button">Clear history</button>
+      </div>
+      <p class="hint">
+        Open a Bunpro review, cram, or learn quiz. Correct and incorrect answers are stored in this
+        browser until you export them. With debug logging on, the review tab console shows lines
+        starting with [bunpro-nakama].
+      </p>
+    </main>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,64 @@
+:root {
+  color-scheme: light;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  margin: 0;
+  width: 320px;
+  background: #f6f3ee;
+  color: #1d1a16;
+}
+
+main {
+  padding: 16px;
+}
+
+h1 {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+
+p {
+  margin: 0 0 12px;
+  line-height: 1.4;
+}
+
+.check {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  font-size: 13px;
+}
+
+.actions {
+  display: grid;
+  gap: 8px;
+}
+
+button {
+  border: 0;
+  border-radius: 8px;
+  padding: 8px 10px;
+  background: #9c3b3b;
+  color: white;
+  cursor: pointer;
+}
+
+button#end,
+button#export-diagnostics {
+  background: #3d4a3e;
+}
+
+button#clear {
+  background: transparent;
+  color: #9c3b3b;
+  border: 1px solid #9c3b3b;
+}
+
+.hint {
+  margin-top: 12px;
+  color: #5c564e;
+  font-size: 12px;
+}
