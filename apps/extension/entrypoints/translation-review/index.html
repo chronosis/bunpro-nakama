@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bad translations</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Bad translations</h1>
+      <p class="hint">Sentences you flagged on a quiz. Remove any you no longer want replaced.</p>
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Sentence</th>
+            <th scope="col">Bunpro</th>
+            <th scope="col">Yours</th>
+            <th scope="col"><span class="sr-only">Remove</span></th>
+          </tr>
+        </thead>
+        <tbody id="bad-translation-list"></tbody>
+      </table>
+    </main>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

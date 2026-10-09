@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import {
   answerMatches,
+  ANSWER_SLOTS,
   emptyAnswers,
+  FORM_COLUMNS,
   FORM_ROWS,
   furiganaParts,
   verbClassLabel,
@@ -92,9 +94,9 @@ function hintFor(form: FormId, politeness: Politeness): string | undefined {
 const correctCount = computed(() => {
   if (!checked.value || !forms.value) return 0;
   let count = 0;
-  for (const row of FORM_ROWS) {
-    for (const politeness of ['casual', 'polite'] as const) {
-      if (answerMatches(answers.value[row.id][politeness], forms.value[row.id][politeness])) count += 1;
+  for (const cell of ANSWER_SLOTS) {
+    if (answerMatches(answers.value[cell.form][cell.politeness], forms.value[cell.form][cell.politeness])) {
+      count += 1;
     }
   }
   return count;
@@ -138,35 +140,25 @@ const correctCount = computed(() => {
       </div>
 
       <div class="overflow-x-auto">
-        <table class="w-full min-w-[36rem] border-collapse text-left">
+        <table class="w-full table-fixed border-collapse text-left">
           <thead>
             <tr class="text-sm text-muted">
-              <th class="w-40 font-medium" />
-              <th class="font-medium">Casual</th>
-              <th class="font-medium">Polite</th>
+              <th class="w-28 font-medium" />
+              <th v-for="column in FORM_COLUMNS" :key="column.id" class="font-medium">{{ column.label }}</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="row in FORM_ROWS" :key="row.id">
-              <th class="py-0 pr-3 align-middle text-sm font-medium">{{ row.label }}</th>
-              <td class="px-1 py-0 align-middle">
+              <th class="py-px pr-3 align-top text-sm font-medium">{{ row.label }}</th>
+              <td v-for="(cell, index) in row.cells" :key="`${row.id}-${index}`" class="px-1 py-px align-top">
                 <KanaField
-                  v-model="answers[row.id].casual"
-                  :status="statusFor(row.id, 'casual')"
-                  :hint="hintFor(row.id, 'casual')"
+                  v-if="cell"
+                  v-model="answers[cell.form][cell.politeness]"
+                  :status="statusFor(cell.form, cell.politeness)"
+                  :hint="hintFor(cell.form, cell.politeness)"
                   :reveal="revealed"
                   :shake-key="shakeKey"
-                  :aria-label="`${row.label} casual`"
-                />
-              </td>
-              <td class="px-1 py-0 align-middle">
-                <KanaField
-                  v-model="answers[row.id].polite"
-                  :status="statusFor(row.id, 'polite')"
-                  :hint="hintFor(row.id, 'polite')"
-                  :reveal="revealed"
-                  :shake-key="shakeKey"
-                  :aria-label="`${row.label} polite`"
+                  :aria-label="`${row.label} ${FORM_COLUMNS[index]?.label ?? ''}`"
                 />
               </td>
             </tr>
@@ -174,7 +166,7 @@ const correctCount = computed(() => {
         </table>
       </div>
 
-      <p v-if="checked" class="mt-2 text-sm">{{ correctCount }} of {{ FORM_ROWS.length * 2 }} correct.</p>
+      <p v-if="checked" class="mt-2 text-sm">{{ correctCount }} of {{ ANSWER_SLOTS.length }} correct.</p>
     </div>
   </form>
 </template>

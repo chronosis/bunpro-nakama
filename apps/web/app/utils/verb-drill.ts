@@ -7,6 +7,8 @@ export type FormId =
   | 'past'
   | 'pastNegative'
   | 'volitional'
+  | 'purpose'
+  | 'purposeNegative'
   | 'progressive'
   | 'progressiveNegative'
   | 'desire'
@@ -34,24 +36,112 @@ export interface FuriganaPart {
   reading?: string;
 }
 
-export const FORM_ROWS: readonly { id: FormId; label: string }[] = [
-  { id: 'dictionary', label: 'Standard' },
-  { id: 'negative', label: 'Standard negative' },
-  { id: 'past', label: 'Past' },
-  { id: 'pastNegative', label: 'Past negative' },
-  { id: 'te', label: 'Te-form' },
-  { id: 'volitional', label: 'Volitional' },
-  { id: 'progressive', label: 'Progressive' },
-  { id: 'progressiveNegative', label: 'Negative progressive' },
-  { id: 'desire', label: 'Desire' },
-  { id: 'desireNegative', label: 'Negative desire' },
-  { id: 'permissive', label: 'Permissive' },
-  { id: 'permissiveNegative', label: 'Permissive negative' },
-  { id: 'compulsive', label: 'Compulsive' },
-  { id: 'compulsiveNegative', label: 'Compulsive negative' },
-  { id: 'advice', label: 'Advice' },
-  { id: 'adviceNegative', label: 'Advice negative' },
+export type GridSlot = { form: FormId; politeness: Politeness } | null;
+
+export const FORM_COLUMNS = [
+  { id: 'casual', label: 'Casual' },
+  { id: 'casualNegative', label: 'Casual negative' },
+  { id: 'polite', label: 'Polite' },
+  { id: 'politeNegative', label: 'Polite negative' },
+] as const;
+
+function slot(form: FormId, politeness: Politeness): GridSlot {
+  return { form, politeness };
+}
+
+export const FORM_ROWS: readonly {
+  id: string;
+  label: string;
+  cells: readonly [GridSlot, GridSlot, GridSlot, GridSlot];
+}[] = [
+  {
+    id: 'standard',
+    label: 'Standard',
+    cells: [
+      slot('dictionary', 'casual'),
+      slot('negative', 'casual'),
+      slot('dictionary', 'polite'),
+      slot('negative', 'polite'),
+    ],
+  },
+  {
+    id: 'past',
+    label: 'Past',
+    cells: [
+      slot('past', 'casual'),
+      slot('pastNegative', 'casual'),
+      slot('past', 'polite'),
+      slot('pastNegative', 'polite'),
+    ],
+  },
+  {
+    id: 'te',
+    label: 'Te-form',
+    cells: [slot('te', 'casual'), null, slot('te', 'polite'), null],
+  },
+  {
+    id: 'volitional',
+    label: 'Volitional',
+    cells: [slot('volitional', 'casual'), null, slot('volitional', 'polite'), null],
+  },
+  {
+    id: 'purpose',
+    label: 'Purpose',
+    cells: [slot('purpose', 'casual'), slot('purposeNegative', 'casual'), null, null],
+  },
+  {
+    id: 'progressive',
+    label: 'Progressive',
+    cells: [
+      slot('progressive', 'casual'),
+      slot('progressiveNegative', 'casual'),
+      slot('progressive', 'polite'),
+      slot('progressiveNegative', 'polite'),
+    ],
+  },
+  {
+    id: 'desire',
+    label: 'Desire',
+    cells: [
+      slot('desire', 'casual'),
+      slot('desireNegative', 'casual'),
+      slot('desire', 'polite'),
+      slot('desireNegative', 'polite'),
+    ],
+  },
+  {
+    id: 'permissive',
+    label: 'Permissive',
+    cells: [
+      slot('permissive', 'casual'),
+      slot('permissiveNegative', 'casual'),
+      slot('permissive', 'polite'),
+      slot('permissiveNegative', 'polite'),
+    ],
+  },
+  {
+    id: 'compulsive',
+    label: 'Compulsive',
+    cells: [
+      slot('compulsive', 'casual'),
+      slot('compulsiveNegative', 'casual'),
+      slot('compulsive', 'polite'),
+      slot('compulsiveNegative', 'polite'),
+    ],
+  },
+  {
+    id: 'advice',
+    label: 'Advice',
+    cells: [
+      slot('advice', 'casual'),
+      slot('adviceNegative', 'casual'),
+      slot('advice', 'polite'),
+      slot('adviceNegative', 'polite'),
+    ],
+  },
 ];
+
+export const ANSWER_SLOTS = FORM_ROWS.flatMap((row) => row.cells.filter((cell) => cell !== null));
 
 const GODAN_ROWS: Record<string, [string, string, string, string, string]> = {
   う: ['わ', 'い', 'う', 'え', 'お'],
@@ -163,6 +253,13 @@ function adviceNegative(nai: string): AnswerCell {
   return pair(one(`${nai}ほうがいい`), one(`${nai}ほうがいいです`));
 }
 
+function purpose(iStem: string): Pick<AnswerGrid, 'purpose' | 'purposeNegative'> {
+  return {
+    purpose: pair(one(`${iStem}にいく`), []),
+    purposeNegative: pair(one(`${iStem}にいかない`), []),
+  };
+}
+
 function modality(te: string, ta: string, nai: string): Pick<
   AnswerGrid,
   'permissive' | 'permissiveNegative' | 'compulsive' | 'compulsiveNegative' | 'advice' | 'adviceNegative'
@@ -193,6 +290,7 @@ function conjugateIchidan(reading: string): AnswerGrid {
     progressiveNegative: negativeProgressive(te),
     desire: pair(one(`${stem}たい`), one(`${stem}たいです`)),
     desireNegative: negativeDesire(stem),
+    ...purpose(stem),
     ...modality(te, ta, nai),
   };
 }
@@ -220,6 +318,7 @@ function conjugateGodan(reading: string, wordClass: 'godan' | 'iku' | 'aru'): An
     progressiveNegative: negativeProgressive(te),
     desire: pair(one(`${iStem}たい`), one(`${iStem}たいです`)),
     desireNegative: negativeDesire(iStem),
+    ...purpose(iStem),
     ...modality(te, ta, negative),
   };
 }
@@ -236,6 +335,7 @@ function conjugateSuru(): AnswerGrid {
     progressiveNegative: negativeProgressive('して'),
     desire: pair(one('したい'), one('したいです')),
     desireNegative: negativeDesire('し'),
+    ...purpose('し'),
     ...modality('して', 'した', 'しない'),
   };
 }
@@ -252,6 +352,7 @@ function conjugateKuru(): AnswerGrid {
     progressiveNegative: negativeProgressive('きて'),
     desire: pair(one('きたい'), one('きたいです')),
     desireNegative: negativeDesire('き'),
+    ...purpose('き'),
     ...modality('きて', 'きた', 'こない'),
   };
 }
@@ -313,6 +414,8 @@ export function emptyAnswers(): Record<FormId, Record<Politeness, string>> {
     past: { casual: '', polite: '' },
     pastNegative: { casual: '', polite: '' },
     volitional: { casual: '', polite: '' },
+    purpose: { casual: '', polite: '' },
+    purposeNegative: { casual: '', polite: '' },
     progressive: { casual: '', polite: '' },
     progressiveNegative: { casual: '', polite: '' },
     desire: { casual: '', polite: '' },

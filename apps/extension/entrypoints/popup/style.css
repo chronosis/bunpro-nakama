@@ -46,6 +46,7 @@ button {
   cursor: pointer;
 }
 
+button#bad-translations,
 button#end,
 button#export-diagnostics {
   background: #3d4a3e;

@@ -13,7 +13,7 @@ export default defineConfig({
   manifest: {
     name: 'Bunpro Nakama',
     description:
-      'Records Bunpro review answers so they can be imported into the Nakama lesson planner.',
+      'Records Bunpro review answers and lets you replace a bad sentence translation with your own.',
     icons: {
       16: '/icon-16.png',
       32: '/icon-32.png',

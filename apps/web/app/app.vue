@@ -1,4 +1,7 @@
 <script setup lang="ts">
+const route = useRoute();
+const fullWidth = computed(() => route.path.startsWith('/verbs'));
+
 useHead({
   htmlAttrs: { lang: 'en' },
   title: 'Bunpro Nakama',
@@ -39,7 +42,7 @@ useHead({
         </nav>
       </template>
     </UHeader>
-    <UMain class="mx-auto w-full max-w-4xl px-4 py-8">
+    <UMain class="w-full px-4 py-2" :class="fullWidth ? 'max-w-none' : 'mx-auto max-w-4xl'">
       <NuxtPage />
     </UMain>
   </UApp>

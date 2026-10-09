@@ -16,6 +16,7 @@ const exportButton = document.querySelector<HTMLButtonElement>('#export');
 const diagnosticsButton = document.querySelector<HTMLButtonElement>('#export-diagnostics');
 const endButton = document.querySelector<HTMLButtonElement>('#end');
 const clearButton = document.querySelector<HTMLButtonElement>('#clear');
+const badTranslationButton = document.querySelector<HTMLButtonElement>('#bad-translations');
 let clearArmed = false;
 
 function setStatus(message: string) {
@@ -66,6 +67,11 @@ debug?.addEventListener('change', () => {
 
 diagnostics?.addEventListener('change', () => {
   void setCaptureDiagnostics(diagnostics.checked).then(render);
+});
+
+badTranslationButton?.addEventListener('click', () => {
+  disarmClear();
+  void browser.tabs.create({ url: browser.runtime.getURL('/translation-review.html') });
 });
 
 exportButton?.addEventListener('click', () => {
